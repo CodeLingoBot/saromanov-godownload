@@ -14,10 +14,10 @@ func prepare(filedata string) string {
 		return strings.Replace(filedata, check, "", -1)
 	}
 
-	filedata = replace("(")
-	filedata = replace(")")
-	filedata = replace(",")
-	return filedata
+	innerfiledata = replace("(")
+	innerfiledata = replace(")")
+	innerfiledata = replace(",")
+	return innerfiledata
 }
 
 //hashURL returns true if item is url and false otherwise

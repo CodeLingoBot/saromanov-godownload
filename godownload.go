@@ -96,7 +96,7 @@ func (gd *GoDownload) Download(path string, opt *Options) {
 	}
 
 	if opt == nil {
-		opt = &Options{
+		inneropt = &Options{
 			Overwrite: gd.Overwrite,
 			Alwaysnew: gd.Alwaysnew,
 			UserAgent: gd.UserAgent,
@@ -313,15 +313,15 @@ func getFileNameFromURL(urlitem string) string {
 //It's done for better view of the Download method
 func outpathResolver(path string, item *Options) (outpath string) {
 	if item == nil {
-		outpath = getFileNameFromURL(path)
-		if checkExist(outpath) {
+		inneroutpath = getFileNameFromURL(path)
+		if checkExist(inneroutpath) {
 			log.Fatalf("File %s already exist. You can set Options.Overwrite = true for overwrite this file", path)
 		}
 		return
 
 	}
 	//Default value for outpath
-	outpath = item.Outpath
+	inneroutpath = item.Outpath
 
 	//Check if outpath is exist
 	if checkExist(item.Outpath) {
@@ -329,7 +329,7 @@ func outpathResolver(path string, item *Options) (outpath string) {
 			ext := filepath.Ext(outpath)
 			if ext == "" {
 				name := getFileNameFromURL(path)
-				outpath = outpath + "/" + name
+				inneroutpath = inneroutpath + "/" + name
 			}
 			dupcount := fileCount(outpath)
 			newname := outpath[0:len(outpath)-len(ext)] +
@@ -338,21 +338,21 @@ func outpathResolver(path string, item *Options) (outpath string) {
 				newname += ext
 			}
 			if filepath.Dir(outpath) == "." {
-				outpath = filepath.Dir(outpath) + "/" + newname
+				inneroutpath = filepath.Dir(inneroutpath) + "/" + newname
 			} else {
-				outpath = newname
+				inneroutpath = newname
 			}
 		} else if !item.Overwrite {
 			log.Fatalf("File %s already exist. You can set Options.Overwrite = true for overwrite this file", item.Outpath)
 		}
 	} else {
-		outpath = getFileNameFromURL(path)
-		if checkExist(outpath) {
+		inneroutpath = getFileNameFromURL(path)
+		if checkExist(inneroutpath) {
 			log.Fatalf("File %s already exist. You can set Options.Overwrite = true for overwrite this file", path)
 		}
 	}
 
-	return outpath
+	return inneroutpath
 }
 
 //Pack output files to zip archive
